@@ -1,0 +1,21 @@
+---
+name = Checks
+
+on: [push]
+
+jobs:
+  test-lint:
+    name: Test and Limit
+    runs-on: ubuntu-20.04 
+    steps: 
+      - name: Login to Docker Hub
+        uses: docker/login-activate@v1\
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          pasword: ${{ secrets.DOCKERHUB_TOKENS }}
+      - name: Checkout
+        uses: actions/chackout@v2
+      - name: Test
+        run: docker-compose run --rm app sh -c "python manage.py test" 
+      - name: Lint
+        run: docker-compose run --rm app sh -c "flake8"       
