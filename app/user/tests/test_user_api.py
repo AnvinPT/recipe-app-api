@@ -50,9 +50,9 @@ class PublicUserApiTests(TestCase):
 
     def test_create_token(self):
         user_details = {
-            'email':'test@example.com',
-            'password':'testpass123',
-            'name':'Test Name'
+            'email': 'test@example.com',
+            'password': 'testpass123',
+            'name': 'Test Name'
         }
         create_user(**user_details)
         payload = {
@@ -60,7 +60,7 @@ class PublicUserApiTests(TestCase):
             'password':user_details['password'],
         }
 
-        res=self.client.get(TOKEN_URL, payload)
+        res=self.client.post(TOKEN_URL, payload)
         self.assertIn('token',res.data)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
@@ -68,7 +68,7 @@ class PublicUserApiTests(TestCase):
         create_user(email='test@example.com',password='pass')
         payload = {'email':'test1@example.com','password':'testpass123'}
 
-        res=self.client.get(TOKEN_URL, payload)
+        res=self.client.post(TOKEN_URL, payload)
         self.assertNotIn('token',res.data)
         self.assertEqual(res.status_code,status.HTTP_400_BAD_REQUEST)
 
@@ -76,7 +76,7 @@ class PublicUserApiTests(TestCase):
         payload = {'email':'test@example','password':''}
         create_user(**payload)
 
-        res=self.client.get(TOKEN_URL, payload)
+        res=self.client.post(TOKEN_URL, payload)
         self.assertNotIn('token',res.data)
         self.assertEqual(res.status_code,status.HTTP_400_BAD_REQUEST)       
  
